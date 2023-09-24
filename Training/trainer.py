@@ -1,1 +1,10 @@
-# This file will parse all song data and categories to feed into neural network
+import pandas as pd
+
+# start training neural network
+
+# initialize
+# access csv
+data = pd.read_csv("../Data/Songs/song_data.csv")
+
+
+
