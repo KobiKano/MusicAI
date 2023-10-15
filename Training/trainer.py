@@ -9,7 +9,7 @@ import Neural.neural
 data = pd.read_csv("../Data/Songs/song_data.csv")
 data = data.transpose()
 
-arr = data.to_numpy(dtype=int)  # convert csv to 2D numpy array where first dimension is an individual song
+arr = data.to_numpy()  # convert csv to 2D numpy array where first dimension is an individual song
 
 # init neural network with 2 layers of size 100 and 5001 inputs and 10 outputs
 network = Neural.neural.Network(2, 100, 5000, 11)
