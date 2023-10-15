@@ -21,8 +21,11 @@ for song in arr:  # each song is an array of song frequency domain with index 50
         iteration += 1
         continue
 
+    # copy song into int array to check if problematic song
+    arr_check = np.array(song, dtype=int)
+
     # check if majority values are zero
-    if np.count_nonzero(song == 0) == 0:
+    if np.count_nonzero(arr_check == 0) == 0:
         # ignore song
         print(f"Ignoring Song: {iteration}")
         continue
