@@ -15,6 +15,8 @@ class Extractor:
     def set_path(self, path):
         # set path on specific string
         self.path = path
+    def set_max_songs(self, max):
+        self.max_index = max
 
     def start(self):
         # find file from given path
