@@ -11,7 +11,7 @@ index = 0
 print("Downloading training files!\n")
 extractor.set_path("../Data/Training/train.csv")
 extractor.start()
-extractor.set_max_songs(3)
+extractor.set_max_songs(2001)
 while not extractor.end:
     # organize training data to save in csv
     data[index] = extractor.next()
