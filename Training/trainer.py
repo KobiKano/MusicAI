@@ -33,8 +33,8 @@ for song in arr:  # each song is an array of song frequency domain with index 50
     # feed song into neural network
     # isolate frequency array and class value
     inputs = song[0:len(song) - 2]
-    desired = np.zeros(11, dtype=int)
-    desired[int(song[5001])] = 1
+    desired = np.zeros(11, dtype=float)
+    desired[int(song[5001])] = 1.0
 
     # feed formatted values into array
     print(f"Training Song: {iteration}")

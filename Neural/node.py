@@ -29,7 +29,9 @@ class Node:
     def get_sum(self, inputs):
         # make sure inputs same size as weights
         if len(inputs) != len(self.weights):
-            raise Exception("Inputs to node not the same size as node weights!")
+            raise Exception(f"Inputs to node not the same size as node weights!\n"
+                            f"Inputs: {len(inputs)}\n "
+                            f"Weights: {len(self.weights)}")
         # sum all values
         s = 0
         for i in range(len(self.weights)):
@@ -48,3 +50,4 @@ class Node:
         self.weights = weights
     def set_bias(self, bias):
         self.bias = bias
+

@@ -1,7 +1,8 @@
 import pandas as pd
 import Neural.node as node
-import random as rand
+import numpy.random as rand
 import math
+import ast
 
 
 # This file contains all functions for the initialization of a neural network
@@ -10,7 +11,7 @@ import math
 def fill(num):
     output = []
     for i in range(num):
-        output.append(rand.randint(0, 50) - 50)
+        output.append(rand.uniform(-1.0, 1.0))
     return output
 
 
@@ -23,23 +24,30 @@ class Network:
         # initialize layers
         self.layers = num_layers
         for i in range(num_layers):
+            self.network.append([])
             if i == 0:
-                self.network.append([node.Node(fill(num_inputs), rand.randint(0, 100) - 50)] * layer_size)
+                for j in range(layer_size):
+                    self.network[i].append(node.Node(fill(num_inputs), rand.uniform(-1.0, 1.0)))
                 continue
-            self.network.append([node.Node(fill(layer_size), rand.randint(0, 100) - 50)] * layer_size)
+            for j in range(layer_size):
+                self.network[i].append(node.Node(fill(layer_size), rand.uniform(-1.0, 1.0)))
 
         # initialize output layer
-        self.network.append([node.Node(fill(layer_size), rand.randint(0, 100) - 50)] * num_outputs)
+        self.network.append([])
+        for j in range(num_outputs):
+            self.network[num_layers].append(node.Node(fill(layer_size), rand.uniform(-1.0, 1.0)))
 
-        print(len(self.network))
-        print(len(self.network[self.layers]))
+        print(f"Length of network: {len(self.network)}")
+        print(f"Length of output layer: {len(self.network[self.layers])}")
 
     def set_weights_biases(self, weights, biases):
         # assume weights are 3-dimensional array
-        for i in range(len(weights)):  # layer
-            for j in range(len(weights[i])):  # node
-                self.network[i][j].set_weights(weights[i][j])
-                self.network[i][j].set_bias(biases[i][j])
+        index = 0
+        for i in range(len(self.network)):  # layer
+            for j in range(len(self.network[i])):  # node
+                self.network[i][j].set_weights(ast.literal_eval(weights[index]))
+                self.network[i][j].set_bias(biases[index])
+                index += 1
 
     def save_weights_biases(self, path):
         data = {
