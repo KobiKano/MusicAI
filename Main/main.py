@@ -1,9 +1,12 @@
+import ast
+
 import Neural.neural
 import pandas as pd
 import pytube as pt
 import Extraction.fourier
 import numpy as np
 import matplotlib.pyplot as plt
+import regex as re
 
 def findGenre(network):
     song = input("Enter Song Name\n")
@@ -63,25 +66,85 @@ def findGenre(network):
             print("Genre: Rock\n")
 
 # this function displays some cool inner workings of the neural network
-def dispGraphs(network):
+def dispGraphs(network, rand_network):
+    print("Graph of weights at first node of original input layer:\n")
+    plt.plot(rand_network.network[0][0].weights)
+    plt.show()
     print("Graph of weights at first node of input layer:\n")
     plt.plot(network.network[0][0].weights)
     plt.show()
+    input("Enter anything to continue")
 
+    print("Graph of weights at 30th node of original input layer:\n")
+    plt.plot(rand_network.network[0][29].weights)
+    plt.show()
+    print("Graph of weights at 30th node of input layer:\n")
+    plt.plot(network.network[0][29].weights)
+    plt.show()
+    input("Enter anything to continue")
+
+    print("Graph of weights at last node of original input layer:\n")
+    plt.plot(rand_network.network[0][len(network.network[0]) - 1].weights)
+    plt.show()
+    print("Graph of weights at last node of input layer:\n")
+    plt.plot(network.network[0][len(network.network[0]) - 1].weights)
+    plt.show()
+    input("Enter anything to continue")
+
+    print("Graph of weights at first node of original hidden layer:\n")
+    plt.plot(rand_network.network[1][0].weights)
+    plt.show()
+    print("Graph of weights at first node of hidden layer:\n")
+    plt.plot(network.network[1][0].weights)
+    plt.show()
+    input("Enter anything to continue")
+
+    print("Graph of weights at 30th node of original hidden layer:\n")
+    plt.plot(rand_network.network[1][29].weights)
+    plt.show()
+    print("Graph of weights at 30th node of hidden layer:\n")
+    plt.plot(network.network[1][29].weights)
+    plt.show()
+    input("Enter anything to continue")
+
+    print("Graph of weights at last node of original hidden layer:\n")
+    plt.plot(rand_network.network[1][len(network.network[1]) - 1].weights)
+    plt.show()
+    print("Graph of weights at last node of hidden layer:\n")
+    plt.plot(network.network[1][len(network.network[1]) - 1].weights)
+    plt.show()
+    input("Enter anything to continue")
+
+    print("Graph of weights at first node of original output layer\n")
+    plt.plot(rand_network.network[2][0].weights)
+    plt.show()
     print("Graph of weights at first node of output layer\n")
     plt.plot(network.network[2][0].weights)
     plt.show()
+    input("Enter anything to continue")
+
+    print("Graph of weights at last node of original output layer\n")
+    plt.plot(rand_network.network[2][len(network.network[2]) - 1].weights)
+    plt.show()
+    print("Graph of weights at last node of output layer\n")
+    plt.plot(network.network[2][len(network.network[2]) - 1].weights)
+    plt.show()
+    input("Enter anything to continue")
 
 # main function to display project
 if __name__ == '__main__':
     # initialize network and locals
     network = Neural.neural.Network(2, 100, 5000, 11)
+    rand_network = Neural.neural.Network(2, 100, 5000, 11)
 
     # load weights and biases from training
     df = pd.read_csv("../Data/NeuralWeightsBiases/network.csv")
+    rand_df = pd.read_csv("../Data/NeuralWeightsBiases/random_network.csv")
 
     # load data into neural network
     network.set_weights_biases(df["weights"].tolist(), df["bias"])
+    rand_network.set_weights_biases(rand_df["weights"].tolist(), rand_df["bias"])
+
 
     # start looping to ask for user input
     while True:
@@ -95,7 +158,7 @@ if __name__ == '__main__':
             case 1:
                 findGenre(network)
             case 2:
-                dispGraphs(network)
+                dispGraphs(network, rand_network)
             case 3:
                 exit(0)
             case default:
