@@ -1,6 +1,7 @@
 import Extraction.extractor
 import Extraction.fourier
 import pandas as pd
+import numpy as np
 # This file will parse all song data and categories to feed into neural network
 # initialize locals
 extractor = Extraction.extractor.Extractor()
@@ -11,10 +12,16 @@ index = 0
 print("Downloading training files!\n")
 extractor.set_path("../Data/Training/train.csv")
 extractor.start()
-extractor.set_max_songs(2001)  # ***EDIT THIS VALUE BASED ON DESIRED TRAINING DATA***
+extractor.set_max_songs(1000)  # ***EDIT THIS VALUE BASED ON DESIRED TRAINING DATA***
 while not extractor.end:
+    arr = extractor.next()
+    # check if invalid values exist
+    if np.isnan(np.sum(arr)):
+        # ignore song
+        continue
+
     # organize training data to save in csv
-    data[index] = extractor.next()
+    data[index] = arr
 
     # save all data in csv
     df = pd.DataFrame(data)

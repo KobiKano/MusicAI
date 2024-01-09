@@ -1,17 +1,14 @@
-import ast
-
 import Neural.neural
 import pandas as pd
 import pytube as pt
 import Extraction.fourier
 import numpy as np
 import matplotlib.pyplot as plt
-import regex as re
 
-def findGenre(network):
+
+def find_genre():
     song = input("Enter Song Name\n")
     print(f"Searching for {song}\n")
-    inputs = []
 
     try:
         yt = pt.Search(song).results[0]  # take first result
@@ -27,11 +24,13 @@ def findGenre(network):
     inputs = Extraction.fourier.transform(file, 0)
     inputs = inputs[0:len(inputs) - 2]
 
-    # copy song into int array to check if problematic song
-    arr_check = np.array(inputs, dtype=int)
+    # normalize inputs between 0.0 and 1.0
+    inputs = np.array(inputs)
+    inputs = (inputs - np.min(inputs)) / (np.max(inputs) - np.min(inputs))
+    inputs = inputs.tolist()
 
-    # check if majority values are zero
-    if np.count_nonzero(arr_check == 0) == 0:
+    # check if invalid values exist
+    if np.isnan(np.sum(inputs)):
         # ignore song
         print("Song Download failed!!!\nReturning to Menu\n")
         return
@@ -65,8 +64,9 @@ def findGenre(network):
         case 10:
             print("Genre: Rock\n")
 
+
 # this function displays some cool inner workings of the neural network
-def dispGraphs(network, rand_network):
+def disp_graphs():
     print("Graph of weights at first node of original input layer:\n")
     plt.plot(rand_network.network[0][0].weights)
     plt.show()
@@ -131,11 +131,14 @@ def dispGraphs(network, rand_network):
     plt.show()
     input("Enter anything to continue")
 
+
 # main function to display project
 if __name__ == '__main__':
     # initialize network and locals
-    network = Neural.neural.Network(2, 100, 5000, 11)
-    rand_network = Neural.neural.Network(2, 100, 5000, 11)
+    network = Neural.neural.Network(2, 100, 5000, 11,
+                                    1.0, 10.0)
+    rand_network = Neural.neural.Network(2, 100, 5000, 11,
+                                         1.0, 10.0)
 
     # load weights and biases from training
     df = pd.read_csv("../Data/NeuralWeightsBiases/network.csv")
@@ -144,7 +147,6 @@ if __name__ == '__main__':
     # load data into neural network
     network.set_weights_biases(df["weights"].tolist(), df["bias"])
     rand_network.set_weights_biases(rand_df["weights"].tolist(), rand_df["bias"])
-
 
     # start looping to ask for user input
     while True:
@@ -156,12 +158,11 @@ if __name__ == '__main__':
 
         match user_in:
             case 1:
-                findGenre(network)
+                find_genre()
             case 2:
-                dispGraphs(network, rand_network)
+                disp_graphs()
             case 3:
                 exit(0)
             case default:
                 print("Unpredicted input, exiting!")
                 exit(1)
-
